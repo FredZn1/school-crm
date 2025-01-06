@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+
+{% block title %} {% if student %} Maktab CRM - O'quvchini tahrirlash {% else %} Maktab CRM - O'quvchi yaratish {% endif %} {% endblock %}
+
+{% block content %}
+    <h1>{% if student %} O'quvchini tahrirlash {% else %} O'quvchi yaratish {% endif %}</h1>
+    <form id="createStudentForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="first_name">Ism:</label>
+            <input type="text" id="first_name" name="first_name" placeholder="Ism kiriting" value="{{ student.first_name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="last_name">Familiya:</label>
+            <input type="text" id="last_name" name="last_name" placeholder="Familiya kiriting" value="{{ student.last_name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="group">Guruh:</label>
+            <select id="group" name="group" required>
+                    <option value="">Guruhni tanlang</option>
+                {% for group in groups %}
+                    <option value="{{ group.group_name }}">{{ group.group_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+                <label for="date_of_birth">Release Date</label>
+            {% if student.date_of_birth %}
+                <input type="date" id="date_of_birth" name="date_of_birth" value="{{ student.date_of_birth|date:'Y-m-d' }}">
+            {% else %}
+                <input type="date" id="date_of_birth" name="date_of_birth">
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="telephone_number">Telefon:</label>
+            <input type="number" id="telephone_number" name="telephone_number" value="{{ student.telephone_number }}" required>
+        </div>
+        <div class="form-group">
+            <label for="address">Manzil:</label>
+            <textarea name="address" id="address" cols="30" rows="10" placeholder="Yashash manzilizni kriting">{{ student.address }}</textarea>
+        </div>
+        <div class="form-group">
+             <label for="image">Cover Image</label>
+            {% if student.image %}
+            <img src="{{ student.image.url }}" alt="{{ student.first_name }} {{ student.last_name }}" class="image" style="width: 350px; height: 200px;">
+            {% endif %}
+            <input type="file" id="image" name="image" accept="image/*">
+        </div>
+        <div class="actions">
+            {% if student %}
+                <button type="submit" class="btn"><i class="fas fa-save"></i> Tahrirlash</button>
+                <a href="{{ student.get_detail_url }}" class="btn btn-secondary"><i class="fas fa-times"></i> Back to Detail</a>
+            {% else %}
+                <button type="submit" class="btn"><i class="fas fa-save"></i> Saqlash</button>
+                <a href="{% url 'students:list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Bekor qilish</a>
+            {% endif %}
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+
+{% block title %}{% if group %} Maktab CRM - Guruh yaratish {% else %} Maktab CRM - Guruh yaratish {% endif %} {% endblock %}
+
+{% block content %}
+    <h1>{% if group %} Guruh yangilash {% else %} Guruh yaratish {% endif %}</h1>
+    <form id="createGroupForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="group_name">Guruh nomi:</label>
+            <input type="text" id="group_name" name="group_name" placeholder="Guruh nomini kiriting" required>
+        </div>
+        <div class="form-group">
+            <label for="classTeacher">Sinf rahbari:</label>
+            <select id="classTeacher" name="classTeacher" required>
+                    <option value="">Sinf rahbarini tanlang</option>
+                {% for teacher in teachers %}
+                    <option value="{{ teacher.teacher_id }}">{{ teacher.teacher_id }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="students">O'quvchilar:</label>
+            <select id="students" name="students" multiple required>
+                {% for student in groups %}
+                    <option value="{{ student.students }}">{{ student.students }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="actions">
+            {% if group %}
+                <button type="submit"><i class="fas fa-save"></i> Update</button>
+                <a href="{{ group.get_detail_url }}" class="btn btn-secondary"><i class="fas fa-times"></i> Detailga qaytish</a>
+            {% else %}
+                <button type="submit"><i class="fas fa-save"></i> Saqlash</button>
+                <a href="{% url 'groups:list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Bekor qilish</a>
+            {% endif %}
+        </div>
+    </form>
+{% endblock %}

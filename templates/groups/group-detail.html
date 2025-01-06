@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+
+{% block title %} Maktab CRM - Guruh ma'lumotlari {% endblock %}
+
+{% block content %}
+    <h1>Guruh ma'lumotlari</h1>
+    <div class="group-details">
+        <div class="group-info">
+            <h2>Guruh 1</h2>
+            <p>ID: 001</p>
+            <p>O'quvchilar soni: 30</p>
+            <p>Sinf rahbari: O'qituvchi A</p>
+        </div>
+        <div class="group-students">
+            <h3>O'quvchilar ro'yxati</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ism</th>
+                        <th>Familiya</th>
+                        <th>Amallar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Ali</td>
+                        <td>Valiyev</td>
+                        <td><button class="btn btn-info">Ko'rish</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="actions">
+        <a href="group-update.html" class="btn"><i class="fas fa-edit"></i> Tahrirlash</a>
+        <a href="" class="btn btn-danger"><i class="fas fa-trash"></i> O'chirish</a>
+    </div>
+{% endblock %}
