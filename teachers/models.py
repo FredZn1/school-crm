@@ -7,7 +7,12 @@ class Teacher(models.Model):
     image = models.ImageField(upload_to='teachers_images/')
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
-    subject = models.OneToOneField(Subject, on_delete=models.CASCADE, related_name='teacher_subject')
+    subject = models.OneToOneField(
+        Subject,
+        on_delete=models.CASCADE,
+        related_name='teacher_subject',
+        null=True, blank=True
+    )
     telephone_number = models.CharField(max_length=13)
     email = models.EmailField(unique=True)
     work_expert = models.PositiveIntegerField()
