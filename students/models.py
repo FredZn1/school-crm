@@ -7,7 +7,10 @@ class Student(models.Model):
     image = models.ImageField(upload_to='students_images/')
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=200)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='student_members', null=True, blank=True)
+    group = models.ForeignKey(
+        Group, on_delete=models.CASCADE,
+                              related_name='student_members',
+                              null=True, blank=True)
     date_of_birth = models.DateField()
     telephone_number = models.CharField(max_length=13)
     address = models.TextField()

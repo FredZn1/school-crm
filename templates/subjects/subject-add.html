@@ -1,20 +1,26 @@
 {% extends 'base.html' %}
 
-
-{% block title %} {% if subject %} Maktab CRM - Fanni tahrirlash {% else %} Maktab CRM - Yangi fan yaratish {% endif %} {% endblock %}
+{% block title %}
+    {% if subject %} Maktab CRM - Fanni tahrirlash {% else %} Maktab CRM - Yangi fan yaratish {% endif %}
+{% endblock %}
 
 {% block content %}
     <h1>{% if subject %} Fanni tahrirlash {% else %} Yangi fan yaratish {% endif %}</h1>
-    <form id="createSubjectForm">
+    <form id="createSubjectForm" method="post">
+        {% csrf_token %}
         <div class="form-group">
             <label for="name">Fan nomi:</label>
-            <input type="text" id="name" name="name" placeholder="Fan nomini kiriting" value="{{ subject.name }}" required>
+            <input type="text" id="name" name="name" placeholder="Fan nomini kiriting"
+                   value="{% if subject %}{{ subject.name }}{% endif %}" required>
         </div>
         <div class="form-group">
             <label for="teacher">O'qituvchilar:</label>
-            <select id="teacher" name="teacher" multiple >
-                {% for subject in subjects %}
-                    <option value="{{ subject.teacher_subject }}"></option>
+            <select id="teacher" name="teacher" multiple>
+                {% for teacher in teachers %}
+                    <option value="{{ teacher.id }}"
+                            {% if subject and teacher in subject.teachers.all %}selected{% endif %}>
+                        {{ teacher.name }}
+                    </option>
                 {% endfor %}
             </select>
         </div>

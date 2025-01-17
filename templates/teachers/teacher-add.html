@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 
-
 {% block title %} {% if teacher %} Maktab CRM - O'qituvchini tahrirlash {% else %} Maktab CRM - Yangi O'qituvchi yaratish {% endif %} {% endblock %}
 
 {% block content %}
@@ -17,9 +16,10 @@
             </div>
             <div class="form-group">
                 <label for="subject">Fan:</label>
-                <select id="subject" name="subject" required>
+                <select id="subject" name="subject">
+                    <option value="" {% if not teacher.subject %}selected{% endif %}>Tanlash</option>
                     {% for subject in subjects %}
-                        <option value="{{ subject.subject_name }}">{{ subject.subject_name }}</option>
+                        <option value="{{ subject.subject_name }}" {% if teacher.subject == subject %}selected{% endif %}>{{ subject.subject_name }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -38,7 +38,7 @@
             <div class="form-group">
                     <label for="image">Image: </label>
                 {% if teacher.image %}
-                    <img src="{{ taacher.image.url }}" alt="{{ teacher.first_name }} {{ teacher.last_name }}" class="image" style="width: 400px; height: 300px;">
+                    <img src="{{ teacher.image.url }}" alt="{{ teacher.first_name }} {{ teacher.last_name }}" class="image" style="width: 400px; height: 300px;">
                 {% endif %}
                     <input type="file" id="image" name="image" accept="image/*">
             </div>
@@ -48,7 +48,7 @@
                     <button type="submit" class="btn"> Tahrirlash</button>
                     <a href="{{ teacher.get_detail_url }}" class="btn btn-secondary"> Back to Detail</a>
                 {% else %}
-                    <button type="submit">class="btn"> Saqlash</button>
+                    <button type="submit" class="btn"> Saqlash</button>
                     <a href="{% url 'teachers:list' %}" class="btn btn-secondary"> Bekor qilish</a>
                 {% endif %}
             </div>

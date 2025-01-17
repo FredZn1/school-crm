@@ -12,11 +12,16 @@ def group_create(request):
     if request.method == 'POST':
         group_name = request.POST.get('group_name')
         teacher_id = request.POST.get('teacher')
-        if group_name and teacher_id:
+
+
+        teacher = None
+        if teacher_id:
+            teacher = get_object_or_404(Teacher, pk=teacher_id)
+
+        if group_name:
             Group.objects.create(
                 group_name=group_name,
-                teachers_id=teacher_id
-            )
+                teacher=teacher  )
             return redirect('groups:list')
     ctx = {'teachers': teachers}
     return render(request, 'groups/group-add.html', ctx)
@@ -26,11 +31,14 @@ def group_update(request, pk):
     teachers = Teacher.objects.all()
     if request.method == 'POST':
         group.group_name = request.POST.get('group_name', group.group_name)
+
         teacher_id = request.POST.get('teacher')
         if teacher_id:
-            group.teachers_id = teacher_id
+            group.teacher = get_object_or_404(Teacher, pk=teacher_id)
+        else:
+            group.teacher = None
         group.save()
-        return redirect(group.get_detail_url())
+        return redirect('groups:detail', pk=group.pk)
     ctx = {'group': group, 'teachers': teachers}
     return render(request, 'groups/group-add.html', ctx)
 
