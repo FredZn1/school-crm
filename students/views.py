@@ -14,18 +14,14 @@ def student_create(request):
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
-        group_id = request.POST.get('group')  # Guruhni olish
+        group_id = request.POST.get('group')
         date_of_birth = request.POST.get('date_of_birth')
         telephone_number = request.POST.get('telephone_number')
         address = request.POST.get('address')
         image = request.FILES.get('image')
-
-        # Guruhni tekshirish: ixtiyoriy
         group = None
         if group_id:
             group = get_object_or_404(Group, pk=group_id)
-
-        # Tekshiruvdan "group_id" ni olib tashladik
         if all([first_name, last_name, date_of_birth, telephone_number, address, image]):
             Student.objects.create(
                 first_name=first_name,

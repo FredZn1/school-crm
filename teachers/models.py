@@ -1,7 +1,6 @@
 from django.db import models
-from subjects.models import Subject
 from django.shortcuts import reverse
-
+from subjects.models import Subject
 
 class Teacher(models.Model):
     image = models.ImageField(upload_to='teachers_images/')
@@ -15,7 +14,7 @@ class Teacher(models.Model):
     )
     telephone_number = models.CharField(max_length=13)
     email = models.EmailField(unique=True)
-    work_expert = models.PositiveIntegerField()
+    work_experience = models.PositiveIntegerField()
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
