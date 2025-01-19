@@ -3,6 +3,7 @@ from django.shortcuts import reverse
 from groups.models import Group
 
 
+
 class Student(models.Model):
     image = models.ImageField(upload_to='students_images/')
     first_name = models.CharField(max_length=100)

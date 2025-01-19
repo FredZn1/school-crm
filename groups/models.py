@@ -2,6 +2,7 @@ from django.db import models
 from teachers.models import  Teacher
 from django.shortcuts import reverse
 
+
 class Group(models.Model):
     group_name = models.CharField(max_length=255)
     teacher = models.ForeignKey(

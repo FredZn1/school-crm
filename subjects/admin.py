@@ -11,13 +11,13 @@ class TeacherInline(admin.StackedInline):
         ('Personal Information', {
             'fields': (
                 ('first_name', 'last_name'),
-                'images'
+                'image'
             )
         }),
         ('Professional Details', {
             'fields': (
                 'email',
-                'phone_number',
+                'telephone_number',
                 'work_experience'
             )
         })

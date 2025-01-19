@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %} {% if student %} Maktab CRM - O'quvchini tahrirlash {% else %} Maktab CRM - O'quvchi yaratish {% endif %} {% endblock %}
+{% block title %}
+    {% if student %}
+        Maktab CRM - O'quvchini tahrirlash
+    {% else %}
+        Maktab CRM - O'quvchi yaratish
+    {% endif %}
+{% endblock %}
 
 {% block content %}
     <h1>{% if student %} O'quvchini tahrirlash {% else %} O'quvchi yaratish {% endif %}</h1>
@@ -8,18 +14,20 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="first_name">Ism:</label>
-            <input type="text" id="first_name" name="first_name" placeholder="Ism kiriting" value="{{ student.first_name }}" required>
+            <input type="text" id="first_name" name="first_name" placeholder="Ism kiriting"
+                   value="{{ student.first_name|default:'' }}" required>
         </div>
         <div class="form-group">
             <label for="last_name">Familiya:</label>
-            <input type="text" id="last_name" name="last_name" placeholder="Familiya kiriting" value="{{ student.last_name }}" required>
+            <input type="text" id="last_name" name="last_name" placeholder="Familiya kiriting"
+                   value="{{ student.last_name|default:'' }}" required>
         </div>
         <div class="form-group">
             <label for="group">Guruh:</label>
             <select id="group" name="group">
                 <option value="">Guruhni tanlang</option>
                 {% for group in groups %}
-                    <option value="{{ group.group_name }}" {% if student and student.group == group.group_name %}selected{% endif %}>
+                    <option value="{{ group.id }}" {% if student and student.group and student.group.id == group.id %}selected{% endif %}>
                         {{ group.group_name }}
                     </option>
                 {% endfor %}
@@ -28,35 +36,47 @@
 
         <div class="form-group">
             <label for="date_of_birth">Tug'ilgan sana:</label>
-            {% if student.date_of_birth %}
-                <input type="date" id="date_of_birth" name="date_of_birth" value="{{ student.date_of_birth|date:'Y-m-d' }}">
-            {% else %}
-                <input type="date" id="date_of_birth" name="date_of_birth">
-            {% endif %}
+            <input type="date" id="date_of_birth" name="date_of_birth"
+                   value="{{ student.date_of_birth|default:''|date:'Y-m-d' }}">
         </div>
 
         <div class="form-group">
             <label for="telephone_number">Telefon:</label>
-            <input type="number" id="telephone_number" name="telephone_number" value="{{ student.telephone_number }}" required>
+            <input type="text" id="telephone_number" name="telephone_number"
+                   placeholder="Telefon raqamingizni kiriting"
+                   value="{{ student.telephone_number|default:'' }}" required>
         </div>
+
         <div class="form-group">
             <label for="address">Manzil:</label>
-            <textarea name="address" id="address" cols="30" rows="10" placeholder="Yashash manzilingizni kiriting">{{ student.address }}</textarea>
+            <textarea name="address" id="address" cols="30" rows="5"
+                      placeholder="Yashash manzilingizni kiriting">{{ student.address|default:'' }}</textarea>
         </div>
+
         <div class="form-group">
             <label for="image">Rasm:</label>
-            {% if student.image %}
-                <img src="{{ student.image.url }}" alt="{{ student.first_name }} {{ student.last_name }}" class="image" style="width: 350px; height: 200px;">
+            {% if student and student.image %}
+                <div class="image-preview">
+                    <img src="{{ student.image.url }}" alt="{{ student.first_name }} {{ student.last_name }}"
+                         class="image" style="max-width: 100%; height: auto;">
+                </div>
             {% endif %}
             <input type="file" id="image" name="image" accept="image/*">
         </div>
+
         <div class="actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i>
+                {% if student %} Tahrirlash {% else %} Saqlash {% endif %}
+            </button>
             {% if student %}
-                <button type="submit" class="btn"><i class="fas fa-save"></i> Tahrirlash</button>
-                <a href="{{ student.get_detail_url }}" class="btn btn-secondary"><i class="fas fa-times"></i>Back to Detail</a>
+                <a href="{{ student.get_detail_url }}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Bekor qilish
+                </a>
             {% else %}
-                <button type="submit" class="btn"><i class="fas fa-save"></i> Saqlash</button>
-                <a href="{% url 'students:list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Bekor qilish</a>
+                <a href="{% url 'students:list' %}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Bekor qilish
+                </a>
             {% endif %}
         </div>
     </form>

@@ -6,7 +6,7 @@ from students.models import Student
 class StudentInline(admin.TabularInline):
     model = Student
     extra = 1
-    fields = ('first_name', 'last_name', 'birth_date')
+    fields = ('first_name', 'last_name', 'date_of_birth')
     classes = ('collapse',)
 
 

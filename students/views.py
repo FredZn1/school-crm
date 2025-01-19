@@ -11,6 +11,8 @@ def student_list(request):
 
 def student_create(request):
     groups = Group.objects.all()
+    error = None
+
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -20,9 +22,17 @@ def student_create(request):
         address = request.POST.get('address')
         image = request.FILES.get('image')
         group = None
-        if group_id:
+
+
+        if group_id and group_id.isdigit():
             group = get_object_or_404(Group, pk=group_id)
-        if all([first_name, last_name, date_of_birth, telephone_number, address, image]):
+        elif group_id:
+            error = 'Guruh identifikatori noto‘g‘ri formatda yuborildi.'
+
+
+        if not error and all([first_name, last_name,
+                              date_of_birth, telephone_number,
+                              address, image]):
             Student.objects.create(
                 first_name=first_name,
                 last_name=last_name,
@@ -33,32 +43,38 @@ def student_create(request):
                 image=image
             )
             return redirect('students:list')
-    ctx = {'groups': groups}
+        else:
+            error = error or 'Iltimos, barcha maydonlarni to‘ldiring.'
+
+    ctx = {'groups': groups, 'error': error}
     return render(request, 'students/student-add.html', ctx)
 
 
 def student_update(request, pk):
     student = get_object_or_404(Student, pk=pk)
     groups = Group.objects.all()
+    error = None
     if request.method == 'POST':
         student.first_name = request.POST.get('first_name', student.first_name)
         student.last_name = request.POST.get('last_name', student.last_name)
-
         group_id = request.POST.get('group')
-
-        if group_id:
+        if group_id and group_id.isdigit():
             student.group = get_object_or_404(Group, pk=group_id)
+        elif group_id:
+            error = 'Guruh identifikatori noto‘g‘ri formatda yuborildi.'
         else:
             student.group = None
-
         student.date_of_birth = request.POST.get('date_of_birth', student.date_of_birth)
         student.telephone_number = request.POST.get('telephone_number', student.telephone_number)
         student.address = request.POST.get('address', student.address)
         if 'image' in request.FILES:
             student.image = request.FILES.get('image')
-        student.save()
-        return redirect(student.get_detail_url())
-    ctx = {'students': student, 'groups': groups}
+
+        if not error:
+            student.save()
+            return redirect(student.get_detail_url())
+
+    ctx = {'students': student, 'groups': groups, 'error': error}
     return render(request, 'students/student-add.html', ctx)
 
 
